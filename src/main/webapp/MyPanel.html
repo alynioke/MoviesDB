@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+Everything outside of the &lt;wicket:panel&gt; tags will be ignored.
+ Might be handy as preview code.
+ 
+ <wicket:panel>
+ 
+    <p style="border: 2px dotted #fc0; padding: 5px;">
+     Here are some panel contents for ya.<br />
+     Put arbitrairy Wicket components in your Panels,
+     like this label: <span wicket:id="label" class="mark">to be replaced</span>, or<br />
+     even another panel: <span wicket:id="otherPanel"  class="mark">also to be replaced</span>.<br />
+     You can nest panels any deep you want.
+    </p>
+ 
+ </wicket:panel>
+</body>
+</html>

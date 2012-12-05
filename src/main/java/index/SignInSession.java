@@ -1,9 +1,14 @@
 package index;
 
 
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authroles.authorization.strategies.role.Roles;
-import org.apache.wicket.request.Request;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.wicket.Request;
+import org.apache.wicket.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authorization.strategies.role.Roles;
 public final class SignInSession extends AuthenticatedWebSession
 {
     private String user;
@@ -28,7 +33,22 @@ public final class SignInSession extends AuthenticatedWebSession
     public final boolean authenticate(final String username, final String password)
     {
         final String WICKET = "wicket";
-
+        String usernameDB;
+        String passwordHashDB;
+        
+		DatabaseManager db = DatabaseManager.getInstance();
+    	ResultSet rs = db.select("SELECT COUNT(*) FROM movie");
+    	try {
+			while (rs.next()) {
+				usernameDB = rs.getString("login");
+				passwordHashDB = rs.getString("password");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+		
+        
+        
         if (user == null)
         {
             // Trivial password "db"
@@ -36,31 +56,23 @@ public final class SignInSession extends AuthenticatedWebSession
             {
                 user = username;
             }
+            
+            //session.get.getUser - надо реализовать
         }
 
         return user != null;
     }
 
-    /**
-     * @return User
-     */
     public String getUser()
     {
         return user;
     }
 
-    /**
-     * @param user
-     *            New user
-     */
     public void setUser(final String user)
     {
         this.user = user;
     }
 
-    /**
-     * @see org.apache.wicket.authentication.AuthenticatedWebSession#getRoles()
-     */
     @Override
     public Roles getRoles()
     {

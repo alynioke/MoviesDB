@@ -14,10 +14,8 @@ public class Login extends Homepage{
 
 	public Login() {
 
-        // Create feedback panel and add to page
         add(new FeedbackPanel("feedback"));
 
-        // Add sign-in form to page
         add(new SignInForm("signInForm"));
 		
 	}

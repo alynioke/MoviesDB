@@ -1,37 +1,14 @@
 <html>
     <head>
         <title>Hello World</title>
+  
     </head>
     <body>
 		<wicket:extend>
 		
-		<script type="text/javascript">
-		window.onload = function(){
-			for (var i=1; i<=parseInt(document.getElementById("pages").innerHTML); i++) {
-				document.getElementById("paging").innerHTML = 
-					document.getElementById("paging").innerHTML+
-					"<a style='margin-right:5px;' href='?wicket:bookmarkablePage=:index.MoviesList&order=title&page="+i+"'>"+i+"</a>";
-			}
-			
-		}
-			
-		</script>
+			<span wicket:id="navigator">[dataview navigator]</span>
 		
-			<div id="paging"></div>
-			<wicket:link>
-			<table cellspacing="0" class="dataview">
-			    <tr>
-			        <th><a href="?wicket:bookmarkablePage=:index.MoviesList&order=title">Title</a></th>
-			        <th><a href="?wicket:bookmarkablePage=:index.MoviesList&order=year">Year</a></th>
-			    </tr>
-			    <tr wicket:id="simple">
-			        <td><span wicket:id="title"></span></td>
-			        <td><span wicket:id="year"></span></td>
-			        <td><img wicket:id="img" /></td>
-			    </tr>
-			</table>
-			</wicket:link>
-			<span wicket:id="pages" id="pages" style="display:none;"></span>
+			<span wicket:id="moviesPanel"></span>
 		</wicket:extend>
     </body>
 </html>
