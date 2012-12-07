@@ -9,6 +9,11 @@
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>4.1.7.Final</version>
+		</dependency>
             	            
 		<dependency>
 		    <groupId>org.apache.wicket</groupId>

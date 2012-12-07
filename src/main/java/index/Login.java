@@ -27,12 +27,7 @@ public class Login extends Homepage{
         // El-cheapo model for form
         private final ValueMap properties = new ValueMap();
 
-        /**
-         * Constructor
-         * 
-         * @param id
-         *            id of the form component
-         */
+       
         public SignInForm(final String id)
         {
             super(id);

@@ -21,7 +21,7 @@ import org.apache.wicket.PageParameters;
 
 public class MoviesList extends Homepage{
 	DataView<Movie> dataView;
-	final MyPanel p;
+	final MoviesPanel p;
 
 	public MoviesList() {
 		DatabaseManager db = DatabaseManager.getInstance();
@@ -29,16 +29,7 @@ public class MoviesList extends Homepage{
     	int moviesPerPage = 8;
     	int totalPages = 0;
     	String page = "0";
-    	ResultSet rs = db.select("SELECT COUNT(*) FROM movie");
-    	try {
-			while (rs.next()) {
-			    totalPages = (int) Math.ceil(rs.getFloat("COUNT(*)")/moviesPerPage);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
-		
-    	rs = db.select("SELECT id, title, year, img FROM movie");//  ORDER BY "+order+" ASC LIMIT "+page+","+Integer.toString(moviesPerPage)+"
+    	ResultSet rs = db.select("SELECT id, title, year, img FROM movie");//  ORDER BY "+order+" ASC LIMIT "+page+","+Integer.toString(moviesPerPage)+"
     	
         Movie movie = null;
         final List<Movie> moviesList = new ArrayList<Movie>();
@@ -56,7 +47,7 @@ public class MoviesList extends Homepage{
 			e.printStackTrace();
 		}
     	
-	    p = new MyPanel("moviesPanel");	    
+	    p = new MoviesPanel("moviesPanel");	    
         dataView = new DataView<Movie>("pageable", new ListDataProvider<Movie>(moviesList)){
 
                 private static final long serialVersionUID = 1L;

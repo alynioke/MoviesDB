@@ -1,16 +1,37 @@
 package index;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.apache.wicket.IClusterable;
 
+@Entity
+@Table (name="movie")
 public class Movie implements IClusterable
 {
-
-	private static final long serialVersionUID = 1L;
-	private String title;
-    private int year;
-    private String img;
+	@Id
+	@GeneratedValue
+	@Column(name = "id")
     private int id;
+
+	@Column(name = "title")
+	private String title;
+
+	@Column(name = "year")
+    private int year;
+
+	@Column(name = "img")
+    private String img;
+
+	@Column(name = "genre")
     private String genre;
+
+	@Column(name = "actors")
     private String actors;
+
+	@Column(name = "description")
     private String description;
 
     public Movie()  

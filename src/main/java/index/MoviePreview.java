@@ -11,12 +11,12 @@ import java.io.*;
 
 import org.apache.wicket.IClusterable;
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.PackageResourceReference;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.hibernate.Session;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -24,6 +24,8 @@ import java.net.UnknownHostException;
 @SuppressWarnings("deprecation")
 public class MoviePreview extends Homepage{
 	private Boolean hasVoted = false;
+	private DatabaseManager db = DatabaseManager.getInstance();
+	private String movieId;
 	
     public static class RatingModel implements IClusterable
     {
@@ -32,23 +34,20 @@ public class MoviePreview extends Homepage{
         private int sumOfRatings = 0;
         private double rating = 0;
 
-        /**
-         * Returns whether the star should be rendered active.
-         * 
-         * @param star
-         *            the number of the star
-         * @return true when the star is active
-         */
+        public void setRating(double rating){
+        	this.rating = rating; 
+        }
+        public void setSumOfRatings(int sumOfRatings){
+        	this.sumOfRatings = sumOfRatings; 
+        }
+        public void setNrOfVotes(int nrOfVotes){
+        	this.nrOfVotes = nrOfVotes; 
+        }
+        
         public boolean isActive(int star)
         {
             return star < ((int)(rating + 0.5));
         }
-
-        /**
-         * Gets the number of cast votes.
-         * 
-         * @return the number of cast votes.
-         */
         public Integer getNrOfVotes()
         {
             return nrOfVotes;
@@ -78,37 +77,53 @@ public class MoviePreview extends Homepage{
         }
     }
     
-    private static RatingModel rating = new RatingModel();
+    private RatingModel rating = new RatingModel();
     
 	public MoviePreview(){
 	}
 	public MoviePreview(PageParameters params){
+		movieId = params.getString("movieId");
 		addComponents(params);
 	}
 
 	
 	
 	public void addComponents(PageParameters params) {
-		DatabaseManager db = DatabaseManager.getInstance();
-		String movieId = params.getString("movieId");
-		//syso + ctrl + space
+		final int movieId = params.getInt("movieId");
+
+		DatabaseHandler.connect();
+		Session session = DatabaseHandler.getSession();
+		session.beginTransaction();
+		Movie mov = (Movie)session.get(Movie.class, movieId);
+		session.getTransaction().commit();
+		
+
+        add(new Label("title", mov.getTitle()));
+        add(new Label("year", Integer.toString(mov.getYear())));
+        add(new Label("genre", mov.getGenre()));
+        add(new Label("description",mov.getDescription()));
+        add(new Label("actors", mov.getActors()));
+        add(new WebImage("img", mov.getImg()));
+        
+		
+		/*
 		String q = "SELECT movie.*, genres.title as genre FROM movie " +
 				" LEFT JOIN genres ON movie.genre_id = genres.id" +
-				" WHERE movie.id = "+movieId;
+				" WHERE movie.id = "+Integer.toString(movieId);
+		//MoviesDatabaseManager
 		ResultSet rs = db.select(q);
 
         Movie movie = null;        
 	    try {
-			while (rs.next()) {
-			    int y = rs.getInt("year");
-			    String t = rs.getString("title");
-			    String i = rs.getString("img");
-			    String g = rs.getString("genre");
-			    int id = rs.getInt("id");
-			    String d = rs.getString("description");
-			    String a = rs.getString("actors");
-		        movie = new Movie(id, t, y, i, g, a, d);
-			}
+			rs.next();
+			int y = rs.getInt("year");
+			String t = rs.getString("title");
+			String i = rs.getString("img");
+			String g = rs.getString("genre");
+			int id = rs.getInt("id");
+			String d = rs.getString("description");
+			String a = rs.getString("actors");
+		    movie = new Movie(id, t, y, i, g, a, d);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -118,8 +133,34 @@ public class MoviePreview extends Homepage{
         add(new Label("genre", movie.getGenre()));
         add(new Label("description", movie.getDescription()));
         add(new Label("actors", movie.getActors()));
-        
         add(new WebImage("img", movie.getImg()));
+        
+
+        String q = "SELECT movie.*, genres.title as genre FROM movie " +
+				" LEFT JOIN genres ON movie.genre_id = genres.id" +
+				" WHERE movie.id = "+movieId;
+		//MoviesDatabaseManager
+		ResultSet rs = db.select(q);
+		
+        Movie movie = null;        
+	    try {
+			rs.next();
+			int y = rs.getInt("year");
+			String t = rs.getString("title");
+			String i = rs.getString("img");
+			String g = rs.getString("genre");
+			int id = rs.getInt("id");
+			String d = rs.getString("description");
+			String a = rs.getString("actors");
+		    movie = new Movie(id, t, y, i, g, a, d);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		rating.setNrOfVotes(nrOfVotes);
+        rating.setRating(ratingValue);
+        rating.setSumOfRatings(sumOfRatings);
+        
+        
         
         add(new RatingPanel("rating", 
         		new PropertyModel<Integer>(rating, "rating"), 
@@ -130,38 +171,61 @@ public class MoviePreview extends Homepage{
             {
 				private static final long serialVersionUID = 1L;
 
+				@Override
 				protected String getActiveStarUrl(int iteration)
 	            {
 	                return "http://yuiblog.com/assets/starTutorial/one-star.png";
 	            }
+				@Override
 				protected String getInactiveStarUrl(int iteration)
 	            {
 	                return "http://yuiblog.com/assets/starTutorial/no-star.png";
 	            }
+				@Override
 				public boolean onIsStarActive(int star)
                 {
-                    return MoviePreview.rating.isActive(star);
+                    return rating.isActive(star);
                 }
 
+				@Override
                 public void onRated(int ratingValue, AjaxRequestTarget target)
                 {
-                	setHasVoted(true);
-                	MoviePreview.rating.addRating(ratingValue);
+                	//тут пишем голос в базу
+                	if  (!getHasVoted()) {
+	                	String q = "INSERT INTO rating VALUES (NULL, "
+	                	+((SignInSession)Session.get()).getUser().getId()+"," +
+	                			" "+Integer.toString(movieId)+", "+ratingValue+")";
+	                	
+	            		db.insert(q);            		
+	                	rating.addRating(ratingValue);
+                	}
                 }
          });	
+        */
         
 	}
+	/*
     public boolean getHasVoted()
     {
-    	/*
-    	 * Если пользователь незалогинен - возвращать ВСЕГДА TRUE
-    	 * Если пользователь залогинен, то
-    	 * ---если он проголосовал, т.е. его голос есть в базе - возвращать TRUE,
-    	 * ---иначе, если не проголосовал, т.е. голоса нет в базе - возвращать FALSE. 
-    	 */
+    	
     	if (((SignInSession)Session.get()).getUser() == null) {
     		return true;
     	} else {
+    		String q = "SELECT * FROM rating WHERE movie_id = "+movieId+" AND user_id = "+((SignInSession)Session.get()).getUser().getId();
+    		ResultSet rs = db.select(q);
+    
+    	    try {
+    			while (rs.next()) {
+    			    if(rs.getInt("id") > 0) 
+    			    {
+    		    	    this.setHasVoted(true);
+    			    } else {
+    			    	this.setHasVoted(false);
+    			    }	}
+    		} catch (SQLException e) {
+    			e.printStackTrace();
+    		}
+    	    System.out.println("has voted="+hasVoted);
     		return hasVoted;
     	}
     }
@@ -170,4 +234,5 @@ public class MoviePreview extends Homepage{
     	hasVoted = b;
     }
 
+*/
 }

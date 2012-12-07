@@ -1,10 +1,12 @@
 package index;
 import org.apache.wicket.markup.html.panel.Panel;
 
-class MyPanel extends Panel
+class MoviesPanel extends Panel
 {
-    public MyPanel(String id)
+
+	public MoviesPanel(String id)
     {
         super(id);
+        setOutputMarkupId(true);
     }
 }

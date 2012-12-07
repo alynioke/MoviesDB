@@ -53,8 +53,15 @@ public class DatabaseManager {
 	public ResultSet delete(String query){
 		return null;
 	}
-	public ResultSet insert(String query){
-		return null;
+	public void insert(String query){
+		java.sql.Statement stmt;
+		ResultSet rs = null;
+		try {
+			stmt = conn.createStatement();
+		    stmt.executeUpdate(query);	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
 	}
 	
 }
