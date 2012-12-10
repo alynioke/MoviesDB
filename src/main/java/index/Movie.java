@@ -1,8 +1,11 @@
 package index;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.wicket.IClusterable;
@@ -25,8 +28,9 @@ public class Movie implements IClusterable
 	@Column(name = "img")
     private String img;
 
-	@Column(name = "genre")
-    private String genre;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="genre_id")
+    private Genre genre;
 
 	@Column(name = "actors")
     private String actors;
@@ -40,7 +44,7 @@ public class Movie implements IClusterable
     }
 
 
-    public Movie(int id, String title, int year, String img, String genre)
+    public Movie(int id, String title, int year, String img, Genre genre)
     {
         this.title = title;
         this.year = year;
@@ -50,7 +54,7 @@ public class Movie implements IClusterable
     }
 
     public Movie(int id, String title, int year, String img, 
-    		String genre, String actors, String description)
+    		Genre genre, String actors, String description)
     {
         this.title = title;
         this.year = year;
@@ -103,12 +107,12 @@ public class Movie implements IClusterable
 	}
 
 
-	public String getGenre() {
+	public Genre getGenre() {
 		return genre;
 	}
 
 
-	public void setGenre(String genre) {
+	public void setGenre(Genre genre) {
 		this.genre = genre;
 	}
 

@@ -2,14 +2,12 @@ package lv.tsi;
 
 import index.AuthenticatedWebPage;
 import index.Homepage;
-import index.Login;
 import index.SignInSession;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
-import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.Session;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authorization.IAuthorizationStrategy;

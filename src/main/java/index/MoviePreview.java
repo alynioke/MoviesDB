@@ -1,25 +1,11 @@
 package index;
 
-import java.sql.ResultSet;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.rating.RatingPanel;
-
-import java.sql.SQLException;
-import java.net.*;
-import java.io.*;
-
-
 import org.apache.wicket.IClusterable;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.PackageResourceReference;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-import org.hibernate.Session;
+import org.apache.wicket.Session;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 @SuppressWarnings("deprecation")
 public class MoviePreview extends Homepage{
@@ -91,16 +77,18 @@ public class MoviePreview extends Homepage{
 	public void addComponents(PageParameters params) {
 		final int movieId = params.getInt("movieId");
 
+		
 		DatabaseHandler.connect();
-		Session session = DatabaseHandler.getSession();
+		org.hibernate.Session session = DatabaseHandler.getSession();
 		session.beginTransaction();
 		Movie mov = (Movie)session.get(Movie.class, movieId);
 		session.getTransaction().commit();
 		
+		//mov = hDBmanager.select(87)
 
         add(new Label("title", mov.getTitle()));
         add(new Label("year", Integer.toString(mov.getYear())));
-        add(new Label("genre", mov.getGenre()));
+        add(new Label("genre", mov.getGenre().getTitle()));
         add(new Label("description",mov.getDescription()));
         add(new Label("actors", mov.getActors()));
         add(new WebImage("img", mov.getImg()));
