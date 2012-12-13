@@ -14,6 +14,8 @@ import java.util.List;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import lv.tsi.database.HibernateUserDAO;
+
 import org.apache.wicket.Request;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
@@ -27,42 +29,28 @@ public final class SignInSession extends AuthenticatedWebSession
         super(request);
     }
 
-    /**
-     * Checks the given username and password, returning a User object if if the username and
-     * password identify a valid user.
-     * 
-     * @param username
-     *            The username
-     * @param password
-     *            The password
-     * @return True if the user was authenticated
-     */
     @Override
     public final boolean authenticate(final String username, final String password)
     {
-        final String WICKET = "wicket";
-        
         //почему возможна ситуация, что нам в функцию передают пароль 
         //(то есть пользователь его ввел), и при этом кто-то может быть еще 
         //залогинен (user != null). 
         
         if (user == null)
         {
-            
-
             byte[] bytesOfMessage;
-            StringBuffer hexString = new StringBuffer();
+            StringBuffer hexPassword = new StringBuffer();
             MessageDigest md;
 			try {
 				bytesOfMessage = password.getBytes("UTF-8");
 				md = MessageDigest.getInstance("SHA");
-	            byte[] thedigest = md.digest(bytesOfMessage);
-	            for (byte character:thedigest) {
+	            byte[] digest = md.digest(bytesOfMessage);
+	            for (byte character:digest) {
 		            String hex = Integer.toHexString(0xFF & character);
 		            if (hex.length() == 1) {
-		                hexString.append('0');
+		                hexPassword.append('0');
 		            }
-		            hexString.append(hex);
+		            hexPassword.append(hex);
 	            }
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
@@ -70,22 +58,11 @@ public final class SignInSession extends AuthenticatedWebSession
 				e.printStackTrace();
 			}
             
-            
-    		DatabaseManager db = DatabaseManager.getInstance();
-        	ResultSet rs = db.select("SELECT * FROM user WHERE email LIKE '"+username+"' " +
-        			" AND password = '"+hexString+"'");
-        
-            try {
-				if (rs.next())
-				{
-				    user = new User(rs.getInt("id"), rs.getString("email"), 
-				    		rs.getString("firstname"), rs.getString("lastname"));
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+        	List<User> users = HibernateUserDAO.getByLoginAndPassword(username, hexPassword);
+        	for (User u:users){
+        		user = u;        		
+        	}
         }
-
         return user != null;
     }
 

@@ -24,7 +24,6 @@ public class Login extends Homepage{
         private static final String USERNAME = "username";
         private static final String PASSWORD = "password";
 
-        // El-cheapo model for form
         private final ValueMap properties = new ValueMap();
 
        
@@ -63,25 +62,16 @@ public class Login extends Homepage{
             }
         }
 
-        /**
-         * @return
-         */
         private String getPassword()
         {
             return properties.getString(PASSWORD);
         }
 
-        /**
-         * @return
-         */
         private String getUsername()
         {
             return properties.getString(USERNAME);
         }
 
-        /**
-         * @return
-         */
         private SignInSession getMySession()
         {
             return (SignInSession)getSession();

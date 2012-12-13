@@ -12,7 +12,6 @@
     <property name="connection.username">admin</property>
     <property name="connection.password">Wp9jW</property>
 
-	<property name="show_sql">true</property>
 
     <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
     <property name="hibernate.show_sql">false</property>
@@ -21,6 +20,9 @@
 	
 	<mapping class="index.Movie" />
 	<mapping class="index.Genre" />
+	<mapping class="index.Rating" />
+	<mapping class="index.User" />
+	
   </session-factory>
 
 </hibernate-configuration>

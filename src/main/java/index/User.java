@@ -1,10 +1,32 @@
 package index;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table (name="user")
 public class User {
-	private String login;
-	private String firstname;
-	private String lastname;
+
+	@Id
+	@GeneratedValue
+	@Column(name = "id")
 	private int id;
+
+	@Column(name = "login")
+	private String login;
+
+	@Column(name = "firstname")
+	private String firstname;
+
+	@Column(name = "lastname")
+	private String lastname;
+
+	@Column(name = "password")
+	private String password;
+
 	
 
     public User()    
@@ -14,6 +36,12 @@ public class User {
     public User(int id, String login, String firstname, String lastname)    
     {   
     	this.id = id;
+    	this.login = login;
+    	this.firstname = firstname;
+    	this.lastname = lastname;
+    }
+    public User(String login, String firstname, String lastname)    
+    {   
     	this.login = login;
     	this.firstname = firstname;
     	this.lastname = lastname;
@@ -42,6 +70,12 @@ public class User {
 	}
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }

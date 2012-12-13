@@ -1,0 +1,37 @@
+[33mcommit b2ab08f4f73bd8ff7d3f2254f454aeaf483dc2eb[m
+Author: Alina Annayeva <alina.annajeva@gmail.com>
+Date:   Mon Dec 10 19:38:52 2012 +0200
+
+    Hibernate works!
+
+[33mcommit 0cf1cf2f8eff3060e8c556f0c5a481e08681eb4b[m
+Author: Alina Annayeva <alina.annajeva@gmail.com>
+Date:   Fri Dec 7 19:42:48 2012 +0200
+
+    Saving rating in db, hibernate
+    
+    Rating is being saved but rating preview hasn't been implemented yet.
+    Hibernate - I added hibernate libraries, config file and mapped one file
+    to the database
+
+[33mcommit 6fdae63cee22d9f08e06957990315a09755466cd[m
+Author: Alina Annayeva <alina.annajeva@gmail.com>
+Date:   Wed Dec 5 22:11:29 2012 +0200
+
+    Movies list, movie preview, login
+    
+    -Movies list with paging
+    -Movie preview with all information and rating (without db)
+    -Template of working login (implementation without db)
+
+[33mcommit e936368750d55235e0ec898741960ab366f76905[m
+Author: Alina Annayeva <alina.annajeva@gmail.com>
+Date:   Sun Nov 18 18:48:26 2012 +0200
+
+    Movies list and broken login
+
+[33mcommit cab68b64ecf63fd748a5345b9c245028421f7b3e[m
+Author: Alina Annayeva <alina.annajeva@gmail.com>
+Date:   Sun Nov 18 18:42:27 2012 +0200
+
+    Initial commit

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import lv.tsi.database.HibernateDAO;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -24,28 +26,9 @@ public class MoviesList extends Homepage{
 	final MoviesPanel p;
 
 	public MoviesList() {
-		DatabaseManager db = DatabaseManager.getInstance();
-    	String order = "title";
-    	int moviesPerPage = 8;
-    	int totalPages = 0;
-    	String page = "0";
-    	ResultSet rs = db.select("SELECT id, title, year, img FROM movie");//  ORDER BY "+order+" ASC LIMIT "+page+","+Integer.toString(moviesPerPage)+"
-    	
-        Movie movie = null;
-        final List<Movie> moviesList = new ArrayList<Movie>();
-        
-	    try {
-			while (rs.next()) {
-			    int y = rs.getInt("year");
-			    String t = rs.getString("title");
-			    String i = rs.getString("img");
-			    int id = rs.getInt("id");
-		        movie = new Movie(id, t, y, i, null);
-		        moviesList.add(movie);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		
+		final List<Movie> moviesList = HibernateDAO.selectAll(Movie.class);
+		
     	
 	    p = new MoviesPanel("moviesPanel");	    
         dataView = new DataView<Movie>("pageable", new ListDataProvider<Movie>(moviesList)){
@@ -71,8 +54,8 @@ public class MoviesList extends Homepage{
         dataView.setItemsPerPage(8);
         dataView.setOutputMarkupId(true);
         p.add(dataView);	
-        
-	    AjaxFallbackLink<MoviesList> link = new AjaxFallbackLink<MoviesList>("orderByTitle") {
+
+	    AjaxFallbackLink<MoviesList> orderByTitle = new AjaxFallbackLink<MoviesList>("orderByTitle") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				MovieTitleComparator movieTitleComparator = new MovieTitleComparator();
@@ -83,7 +66,18 @@ public class MoviesList extends Homepage{
 				//ajax'ом нельзя обновить repeater, а надо обновить компонент, в котором он лежит
 			}
 		};
-		p.add(link);
+	    AjaxFallbackLink<MoviesList> orderByYear = new AjaxFallbackLink<MoviesList>("orderByYear") {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				MovieYearComparator movieYearComparator = new MovieYearComparator();
+				Collections.sort(moviesList, movieYearComparator);
+				if (target != null)  {
+					target.addComponent(p); 
+				}
+			}
+		};
+		p.add(orderByTitle);
+		p.add(orderByYear);
 	    add(p);
 	    
 	    add(new PagingNavigator("navigator", dataView));
