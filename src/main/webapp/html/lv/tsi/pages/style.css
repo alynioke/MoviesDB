@@ -1,0 +1,48 @@
+@CHARSET "UTF-8";
+*{
+    font-decoration:none;
+    font-style:normal;
+    color:#2B2826;
+}
+.menu_link{
+	font-size:14px;
+	font-weight:bold;
+	margin-right:10px;
+    color:white;
+}
+
+#header em{
+	color:yellow;
+}
+#header{
+	height:20px;
+	width:85%;
+	background-color:#AAAAAA;
+    font-size:14px;
+    font-weight:bold;
+    font-decoration:underline;
+    padding:5px 5px 5px 35px;
+}
+#body{
+	width:85%;
+	padding:20px;
+	text-align:justify;
+}
+
+input{
+	width:230px;
+	height:21px;
+	border:1px solid #cecece;
+}
+
+ul.feedbackPanel{
+	list-style-type:none;
+}
+span.feedbackPanelERROR{
+	background-color: yellow;
+}
+#welcome{
+	float:right;
+	color:yellow;
+}
+

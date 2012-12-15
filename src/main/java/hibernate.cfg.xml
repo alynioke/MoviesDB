@@ -18,10 +18,10 @@
    
 	<property name="show_sql">true</property>
 	
-	<mapping class="index.Movie" />
-	<mapping class="index.Genre" />
-	<mapping class="index.Rating" />
-	<mapping class="index.User" />
+	<mapping class="lv.tsi.entities.Movie" />
+	<mapping class="lv.tsi.entities.Genre" />
+	<mapping class="lv.tsi.entities.Rating" />
+	<mapping class="lv.tsi.entities.User" />
 	
   </session-factory>
 

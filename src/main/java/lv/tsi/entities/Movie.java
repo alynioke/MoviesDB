@@ -1,5 +1,4 @@
-package index;
-import javax.persistence.Column;
+package lv.tsi.entities;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,35 +13,25 @@ import org.apache.wicket.IClusterable;
 @Table (name="movie")
 public class Movie implements IClusterable
 {
-	@Id
-	@GeneratedValue
-	@Column(name = "id")
+    @Id
+    @GeneratedValue
     private int id;
-
-	@Column(name = "title")
-	private String title;
-
-	@Column(name = "year")
+    
+    private String title;
     private int year;
-
-	@Column(name = "img")
     private String img;
-
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="genre_id")
-    private Genre genre;
-
-	@Column(name = "actors")
     private String actors;
-
-	@Column(name = "description")
     private String description;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="genre_id")
+    private Genre genre;
+    
 
     public Movie()  
     {  
-    	
+        
     }
-
 
     public Movie(int id, String title, int year, String img, Genre genre)
     {
@@ -54,7 +43,7 @@ public class Movie implements IClusterable
     }
 
     public Movie(int id, String title, int year, String img, 
-    		Genre genre, String actors, String description)
+            Genre genre, String actors, String description)
     {
         this.title = title;
         this.year = year;
@@ -64,7 +53,6 @@ public class Movie implements IClusterable
         this.setActors(actors);
         this.setDescription(description);
     }
-
 
     public String getTitle()
     {
@@ -76,65 +64,51 @@ public class Movie implements IClusterable
         this.title = title;
     }
 
+    public int getYear() {
+        return year;
+    }
 
-	public int getYear() {
-		return year;
-	}
+    public void setYear(int year) {
+        this.year = year;
+    }
 
+    public String getImg() {
+        return img;
+    }
 
-	public void setYear(int year) {
-		this.year = year;
-	}
+    public void setImg(String img) {
+        this.img = img;
+    }
 
+    public int getId() {
+        return id;
+    }
 
-	public String getImg() {
-		return img;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
+    public Genre getGenre() {
+        return genre;
+    }
 
-	public void setImg(String img) {
-		this.img = img;
-	}
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
 
+    public String getActors() {
+        return actors;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public void setActors(String actors) {
+        this.actors = actors;
+    }
 
+    public String getDescription() {
+        return description;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
-
-	public Genre getGenre() {
-		return genre;
-	}
-
-
-	public void setGenre(Genre genre) {
-		this.genre = genre;
-	}
-
-
-	public String getActors() {
-		return actors;
-	}
-
-
-	public void setActors(String actors) {
-		this.actors = actors;
-	}
-
-
-	public String getDescription() {
-		return description;
-	}
-
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
