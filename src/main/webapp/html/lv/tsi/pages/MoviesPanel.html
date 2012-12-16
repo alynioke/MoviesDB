@@ -6,20 +6,20 @@
 </head>
 <body>
 
- <wicket:panel>
- 	<wicket:link>
-			<table cellspacing="0" class="dataview">
-			    <tr>
-			        <th><a href="MoviesList.html" wicket:id="orderByTitle">Title</a></th>
-			        <th><a href="MoviesList.html" wicket:id="orderByYear">Year</a></th>
-			    </tr>
-			    <tr wicket:id="pageable">
-			        <td><span wicket:id="title"></span></td>
-			        <td><span wicket:id="year"></span></td>
-			        <td><a wicket:id="link"><img wicket:id="img" /></a></td>
-			    </tr>
-			</table>
-			</wicket:link> 
- </wicket:panel>
+<wicket:panel>
+	<wicket:link>
+	   <div>
+	    <div wicket:id="orderByTitle" class="sort">Sort movies by title</div>
+	    <div wicket:id="orderByYear" class="sort">Sort movies by year</div>
+	   </div>
+	   <div wicket:id="pageable"  class="movieItem">
+	       <a wicket:id="link">
+	           <img wicket:id="img" />
+	       </a>
+		   <div wicket:id="title"></div>
+		   <div wicket:id="year"></div>
+	   </div>
+	</wicket:link> 
+</wicket:panel>
 </body>
 </html>

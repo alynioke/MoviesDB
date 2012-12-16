@@ -21,10 +21,11 @@ public class MoviesList extends Homepage
     DataView<Movie> dataView;
     final MoviesPanel p;
     private static final int MOVIES_PER_PAGE = 8;
+	HibernateDAO hibernateDAO = new HibernateDAO();
     
     public MoviesList() 
     {
-        final List<Movie> moviesList = HibernateDAO.selectAll(Movie.class);
+        final List<Movie> moviesList = hibernateDAO.selectAll(Movie.class);
 
         p = new MoviesPanel("moviesPanel");        
         dataView = new DataView<Movie>("pageable", new ListDataProvider<Movie>(moviesList))

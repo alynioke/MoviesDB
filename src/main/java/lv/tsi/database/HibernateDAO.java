@@ -9,28 +9,32 @@ import org.hibernate.criterion.Restrictions;
 
 public class HibernateDAO 
 {
+	DatabaseHandler dbHandler = DatabaseHandler.instance;
+	//чтоб не работать с базой - нам надо вернуть мок базы
+	
     @SuppressWarnings("unchecked")
-    public static <T> T selectById(Class<T> itemClass, int id)
+    public <T> T selectById(Class<T> itemClass, int id)
     {
-        Session session = DatabaseHandler.getSession();
+    	//тут надо чтоб вернул НАШУ сессию
+        Session session = dbHandler.getSession();
         session.beginTransaction();
         T object = (T) session.get(itemClass, id);
         session.getTransaction().commit();
         return object;
     }
     
-    public static <T> void insert(T object)
+    public <T> void insert(T object)
     {
-        Session session = DatabaseHandler.getSession();
+        Session session = dbHandler.getSession();
         session.beginTransaction();
         session.save(object);
         session.getTransaction().commit();
     }
     
     @SuppressWarnings("unchecked")
-    public static <T> List<T> selectAll(Class<T> itemClass)
+    public <T> List<T> selectAll(Class<T> itemClass)
     {
-        Session session = DatabaseHandler.getSession();
+        Session session = dbHandler.getSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(itemClass);
         List<T> objects = criteria.list();

@@ -1,5 +1,6 @@
 package lv.tsi.pages;
 
+import lv.tsi.database.DatabaseHandler;
 import lv.tsi.database.HibernateDAO;
 import lv.tsi.database.HibernateRatingDAO;
 import lv.tsi.entities.*;
@@ -19,6 +20,9 @@ import org.apache.wicket.ajax.*;
 @SuppressWarnings("deprecation")
 public class MoviePreview extends Homepage
 {
+	DatabaseHandler dbHandler = DatabaseHandler.instance;
+	HibernateDAO hibernateDAO = new HibernateDAO();
+	HibernateRatingDAO hibernateRatingDAO = new HibernateRatingDAO();
     private Boolean hasVoted = false;
     private int movieId;
     private RatingModel rating = new RatingModel();
@@ -80,24 +84,27 @@ public class MoviePreview extends Homepage
     public void addComponents(PageParameters params) 
     {
         movieId = params.getInt("movieId");
-        Movie movie = HibernateDAO.selectById(Movie.class, movieId);
+        Movie movie = hibernateDAO.selectById(Movie.class, movieId);
         
-        add(new Label("title", movie.getTitle()));
-        add(new Label("year", Integer.toString(movie.getYear())));
+        add(new Label("title", movie.getTitle()+" ("+Integer.toString(movie.getYear())+")"));
+        
         add(new Label("genre", movie.getGenre().getTitle()));
         add(new Label("description",movie.getDescription()));
-        add(new Label("actors", movie.getActors()));
+        add(new Label("actors", "Stars: "+movie.getActors()));
         add(new WebImage("img", movie.getImg()));
 
-        List<Rating> results = HibernateRatingDAO.getByMovieIdAndUserId(movieId, 0);
-        
+        List<Rating> results = hibernateRatingDAO.getByMovieIdAndUserId(movieId, 0);
+
         int nrOfVotes = results.size(), sumOfRatings = 0;
         for (Rating res: results) {
             sumOfRatings += res.getRating();
         }
         float ratingValue = ((float)sumOfRatings) / ((float)nrOfVotes);
-                
-        rating.setNrOfVotes(nrOfVotes);
+        if (ratingValue > 0) {   
+        	rating.setNrOfVotes(nrOfVotes);
+        } else {
+            rating.setNrOfVotes(0);
+        }
         rating.setRating(ratingValue);
         rating.setSumOfRatings(sumOfRatings);
         
@@ -134,7 +141,7 @@ public class MoviePreview extends Homepage
                     if  (!getHasVoted()) {
                         Rating newRating = new Rating(
                         		((SignInSession)Session.get()).getUser().getId(), movieId, ratingValue);   
-                        HibernateDAO.insert(newRating);
+                        hibernateDAO.insert(newRating);
                         rating.addRating(ratingValue);
                     }
                 }
@@ -148,7 +155,7 @@ public class MoviePreview extends Homepage
             return true;
         } else {
             int userId = user.getId();
-            List<Rating> existingRating = HibernateRatingDAO.getByMovieIdAndUserId(movieId, userId);
+            List<Rating> existingRating = hibernateRatingDAO.getByMovieIdAndUserId(movieId, userId);
             for (Rating er: existingRating) {
                 Boolean hasVoted = er.getId() > 0;
                 this.setHasVoted(hasVoted);

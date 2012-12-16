@@ -10,11 +10,12 @@ import org.hibernate.criterion.Restrictions;
 
 public class HibernateRatingDAO 
 {
-    public static List<Rating> getByMovieIdAndUserId(int movieId, int userId) 
+	DatabaseHandler dbHandler = DatabaseHandler.instance;
+	
+    public List<Rating> getByMovieIdAndUserId(int movieId, int userId) 
     {
         Criteria criteria;
-        
-        Session session = DatabaseHandler.getSession();
+        Session session = dbHandler.getSession();
         session.beginTransaction();
         if (userId == 0) {
             criteria = session.createCriteria(Rating.class).add(Restrictions.eq("movie_id", movieId));

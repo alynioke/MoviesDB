@@ -1,5 +1,6 @@
 package lv.tsi.pages;
 
+import lv.tsi.database.HibernateDAO;
 import lv.tsi.database.HibernateUserDAO;
 import lv.tsi.entities.User;
 
@@ -12,7 +13,8 @@ import org.apache.wicket.authorization.strategies.role.Roles;
 public final class SignInSession extends AuthenticatedWebSession
 {
     private User user;
-
+	HibernateUserDAO hibernateUserDAO = new HibernateUserDAO();
+	
     public SignInSession(Request request)
     {
         super(request);
@@ -43,10 +45,15 @@ public final class SignInSession extends AuthenticatedWebSession
             } catch (Exception e) {
                 e.printStackTrace();
             } 
-            //catching generic exception to avoid multiple catch blocks
-            users = HibernateUserDAO.getByLoginAndPassword(username, hexPassword);
+            //catching generic exception to avoid multiple catch blocks            
+            users = hibernateUserDAO.getByLoginAndPassword(username, hexPassword.toString());
         }
-        return users.size() != 0;
+        
+        if (users.size() != 0) {
+        	user = users.get(0);
+        	return true;
+        }
+        return false;
     }
 
     public User getUser()

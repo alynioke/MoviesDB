@@ -53,6 +53,7 @@ public class ImdbApplication extends WebApplication
                     if (((SignInSession)Session.get()).isSignedIn()) {
                         return true;
                     }
+                    return true;
                 }
                 // okay to proceed
                 return true;

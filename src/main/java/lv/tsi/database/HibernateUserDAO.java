@@ -9,15 +9,17 @@ import org.hibernate.criterion.Restrictions;
 
 public class HibernateUserDAO 
 {
-    public static List<User> getByLoginAndPassword(String login, StringBuffer hexPassword)
+	DatabaseHandler dbHandler = DatabaseHandler.instance;
+	
+    public List<User> getByLoginAndPassword(String login, String hexPassword)
     {        
-        Session session = DatabaseHandler.getSession();
+        Session session = dbHandler.getSession();
         session.beginTransaction();
     
         Criteria criteria = session.createCriteria(User.class).add(
                 Restrictions.and(
                         Restrictions.like("login", login), 
-                        Restrictions.eq("password", hexPassword.toString())
+                        Restrictions.eq("password", hexPassword)
                 ));
         @SuppressWarnings("unchecked")
         List<User> user = criteria.list();

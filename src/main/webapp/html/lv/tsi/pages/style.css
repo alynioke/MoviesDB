@@ -1,20 +1,31 @@
 @CHARSET "UTF-8";
-*{
+
+* {
     font-decoration:none;
     font-style:normal;
     color:#2B2826;
 }
-.menu_link{
+
+#body {
+    width:85%;
+    padding:20px;
+    text-align:justify;
+}
+
+
+/*header*/
+.menu_link {
 	font-size:14px;
 	font-weight:bold;
 	margin-right:10px;
     color:white;
 }
 
-#header em{
+#header em {
 	color:yellow;
 }
-#header{
+
+#header {
 	height:20px;
 	width:85%;
 	background-color:#AAAAAA;
@@ -23,26 +34,80 @@
     font-decoration:underline;
     padding:5px 5px 5px 35px;
 }
-#body{
-	width:85%;
-	padding:20px;
-	text-align:justify;
+
+#welcome {
+    float:right;
+    color:yellow;
+    margin-right:7px;
 }
 
-input{
-	width:230px;
-	height:21px;
-	border:1px solid #cecece;
+#signout {
+    float:right;
 }
 
-ul.feedbackPanel{
+
+/*login*/
+input {
+    width:230px;
+    height:21px;
+    border:1px solid #cecece;
+}
+
+ul.feedbackPanel {
 	list-style-type:none;
 }
-span.feedbackPanelERROR{
+
+span.feedbackPanelERROR {
 	background-color: yellow;
 }
-#welcome{
-	float:right;
-	color:yellow;
+
+
+/*movies list*/
+div.movieItem {
+	width:203px;
+	padding:10px 35px;
+	float:left;
+}
+
+div.navigator {
+	clear:both;
+}
+
+div.sort {
+    border: 2px dotted gray;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    padding-left: 7px;
+    width: 135px;
+}
+
+
+/*movie preview*/
+#movieImg {
+	width:210px;
+	margin-right:25px;
+	float:left;
+}
+#movieInfo {
+	width:300px;
+	float:left;
+}
+
+#title {
+	font-size:18px;
+	font-weight:bold;
+	
+}
+
+#actors {
+	margin-top:10px;
+	margin-bottom:10px;
+	padding-bottom:12px;
+	border-bottom:1px solid #CECECE;
+}
+
+#genre {
+	text-decoration:underline;
 }
 

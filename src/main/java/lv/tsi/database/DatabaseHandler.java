@@ -8,8 +8,11 @@ import org.hibernate.service.ServiceRegistryBuilder;
 public class DatabaseHandler {
 
     static Session session;
+    //если не статический - то смогу подменять объект для тестов
+    
+    public static DatabaseHandler instance = new DatabaseHandler();
 
-    public static void connect() 
+    public void connect() 
     {
         SessionFactory factory;
         ServiceRegistry serviceRegistry;
@@ -20,16 +23,14 @@ public class DatabaseHandler {
         session = factory.openSession();        
     }
 
-    public static Session getSession() 
+    public Session getSession() 
     {
         return session;
     }
 
-    public static void close() 
+    public void close() 
     {
         session.close();
         session = null;
     }
-
 }
-
