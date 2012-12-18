@@ -1,19 +1,19 @@
 package lv.tsi.database;
 
-import static org.junit.Assert.*;
-
-import javax.transaction.Synchronization;
-
 import lv.tsi.database.DatabaseHandler;
 import lv.tsi.database.HibernateDAO;
 import lv.tsi.entities.Movie;
 
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.Mockito.*;
 
-import org.hibernate.HibernateException;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.engine.transaction.spi.LocalStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,6 +23,8 @@ import org.junit.rules.ExpectedException;
 public class HibernateDAOTest 
 {
 	DatabaseHandler dbHandler = DatabaseHandler.instance;
+	HibernateDAO hibernateDAO;
+	Session sessionMock;
 	
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
@@ -30,6 +32,13 @@ public class HibernateDAOTest
 	@Before public void setUp() 
 	{
 		dbHandler.connect();
+		hibernateDAO = new HibernateDAO();
+		DatabaseHandler dbHandlerMock = mock(DatabaseHandler.class);
+		sessionMock = mock(Session.class);
+		hibernateDAO.dbHandler = dbHandlerMock;
+		
+		when(sessionMock.getTransaction()).thenReturn(mock(Transaction.class));
+		when(dbHandlerMock.getSession()).thenReturn(sessionMock);
 	}
 
 	@After public void tearDown() 
@@ -40,8 +49,8 @@ public class HibernateDAOTest
 	@Test
 	public void testSelectById() 
 	{
-		HibernateDAO hibernateDAO = new HibernateDAO();
 		//select with invalid id
+		when(sessionMock.get(Movie.class, -5)).thenReturn(null);
 		Movie movie = hibernateDAO.selectById(Movie.class, -5);
 		assertTrue(movie == null);
 		
@@ -54,30 +63,26 @@ public class HibernateDAOTest
 	@Test
 	public void testSelectByValidId()
 	{
-		HibernateDAO hibernateDAO = new HibernateDAO();
-		DatabaseHandler dbHandlerMock = mock(DatabaseHandler.class);
-		Session sessionMock = mock(Session.class);
-
 		when(sessionMock.get(Movie.class, 18)).thenReturn(new Movie());
-		when(sessionMock.getTransaction()).thenReturn(mock(Transaction.class));
-		when(dbHandlerMock.getSession()).thenReturn(sessionMock);
-		
-		hibernateDAO.dbHandler = dbHandlerMock;
-		
-		//select with valid id 
 		Movie movie = hibernateDAO.selectById(Movie.class, 18);
 		assertNotNull(movie);
 	}
 	
-	@Test
-	public void testInsert()
-	{
-		
-	}
-
 	@Test 
 	public void testSelectAll() 
-	{
-		
+	{		
+		Criteria criteriaMock = mock(Criteria.class);
+		List<Movie> moviesList = new ArrayList<Movie>();
+		moviesList.add(new Movie());
+		moviesList.add(new Movie());
+		when(criteriaMock.list()).thenReturn(moviesList);
+		when(sessionMock.createCriteria(Movie.class)).thenReturn(criteriaMock);
+	
+		List<Movie> movies = hibernateDAO.selectAll(Movie.class);
+		assertNotNull(movies);
+		assertTrue(movies.size() != 0);
+
+	    exception.expect(NullPointerException.class);
+		movies = hibernateDAO.selectAll(null);
 	}
 }

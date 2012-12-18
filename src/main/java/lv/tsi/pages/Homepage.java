@@ -14,13 +14,15 @@ public class Homepage extends WebPage implements AuthenticatedWebPage
     public Homepage() 
     {
     	dbHandler.connect();
-        
+
         String welcome = "";
+        String signout = "";
         User user = ((SignInSession)Session.get()).getUser();
         if (user != null) {
-            System.out.println("Login - "+user.getLogin());
+        	signout = "Sign out";
         	welcome = "Welcome, "+user.getFirstname()+"!";
         }
         add(new Label("welcome", welcome));
+        add(new Label("signout", signout));
     }
 }

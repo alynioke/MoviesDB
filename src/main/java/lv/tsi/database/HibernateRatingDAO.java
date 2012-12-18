@@ -18,8 +18,10 @@ public class HibernateRatingDAO
         Session session = dbHandler.getSession();
         session.beginTransaction();
         if (userId == 0) {
+        	//if userId is null I need all ratings for movieId
             criteria = session.createCriteria(Rating.class).add(Restrictions.eq("movie_id", movieId));
         } else {
+        	//if userId is not null I need to check if this user have rated the movie
             criteria = session.createCriteria(Rating.class).add(
                     Restrictions.and(
                             Restrictions.eq("movie_id", movieId), 

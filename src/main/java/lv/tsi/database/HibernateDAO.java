@@ -15,6 +15,9 @@ public class HibernateDAO
     @SuppressWarnings("unchecked")
     public <T> T selectById(Class<T> itemClass, int id)
     {
+    	if (itemClass == null) {
+    		throw new NullPointerException("parameter is null at method selectById");
+    	}
     	//тут надо чтоб вернул НАШУ сессию
         Session session = dbHandler.getSession();
         session.beginTransaction();
@@ -34,6 +37,9 @@ public class HibernateDAO
     @SuppressWarnings("unchecked")
     public <T> List<T> selectAll(Class<T> itemClass)
     {
+    	if (itemClass == null) {
+    		throw new NullPointerException("parameter is null at method selectAll");
+    	}
         Session session = dbHandler.getSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(itemClass);

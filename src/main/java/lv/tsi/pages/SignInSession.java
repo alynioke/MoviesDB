@@ -23,32 +23,13 @@ public final class SignInSession extends AuthenticatedWebSession
     @Override
     public final boolean authenticate(final String username, final String password)
     {
-        //почему возможна ситуация, что нам в функцию передают пароль 
-    	//(то есть пользователь его ввел), и при этом кто-то может быть еще 
-    	//залогинен (user != null). 
         List<User> users = null;
         if (user == null) {
-            byte[] bytesOfMessage;
-            StringBuffer hexPassword = new StringBuffer();
-            MessageDigest md;
-            try {
-                bytesOfMessage = password.getBytes("UTF-8");
-                md = MessageDigest.getInstance("SHA");
-                byte[] digest = md.digest(bytesOfMessage);
-                for (byte character:digest) {
-                    String hex = Integer.toHexString(0xFF & character);
-                    if (hex.length() == 1) {
-                        hexPassword.append('0');
-                    }
-                    hexPassword.append(hex);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } 
-            //catching generic exception to avoid multiple catch blocks            
-            users = hibernateUserDAO.getByLoginAndPassword(username, hexPassword.toString());
+            String hexPassword = getHash(password);        
+            users = hibernateUserDAO.getByLoginAndPassword(username, hexPassword);
         }
-        
+        if (users == null)
+        	return false;
         if (users.size() != 0) {
         	user = users.get(0);
         	return true;
@@ -56,6 +37,33 @@ public final class SignInSession extends AuthenticatedWebSession
         return false;
     }
 
+    protected String getHash(String password) 
+    {
+    	if (password == null) {
+    		throw new NullPointerException("parameter value is null at method getHash");
+    	}
+    		
+    	StringBuffer hexPassword = new StringBuffer();
+        byte[] bytesOfMessage;
+        MessageDigest md;
+    	try {
+            bytesOfMessage = password.getBytes("UTF-8");
+            md = MessageDigest.getInstance("SHA");
+            byte[] digest = md.digest(bytesOfMessage);
+            for (byte character:digest) {
+                String hex = Integer.toHexString(0xFF & character);
+                if (hex.length() == 1) {
+                    hexPassword.append('0');
+                }
+                hexPassword.append(hex);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+        //catching generic exception to avoid multiple catch blocks   
+    	return hexPassword.toString();
+    }
+    
     public User getUser()
     {
         return user;

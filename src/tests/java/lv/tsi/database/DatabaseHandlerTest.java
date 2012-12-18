@@ -8,6 +8,7 @@ import org.junit.Test;
 public class DatabaseHandlerTest 
 {
 	DatabaseHandler dbHandler = DatabaseHandler.instance;
+	
 	@Test
 	public void testDatabaseHandler() 
 	{

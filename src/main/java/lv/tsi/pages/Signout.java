@@ -9,5 +9,6 @@ public class Signout extends Homepage
     {
         getSession().invalidate();
         addOrReplace(new Label("welcome", ""));
+        addOrReplace(new Label("signout", ""));
     }
 }
