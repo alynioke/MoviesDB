@@ -1,5 +1,6 @@
 package lv.tsi;
 
+import lv.tsi.database.DatabaseHandler;
 import lv.tsi.pages.AuthenticatedWebPage;
 import lv.tsi.pages.Homepage;
 import lv.tsi.pages.SignInSession;
@@ -8,6 +9,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.Session;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authorization.IAuthorizationStrategy;
@@ -33,8 +35,11 @@ public class ImdbApplication extends WebApplication
     protected void init()
     {
         super.init();
+    	DatabaseHandler dbHandler = DatabaseHandler.instance;
+    	dbHandler.databaseInit();
         IResourceSettings resourceSettings = getResourceSettings();
         resourceSettings.addResourceFolder("html");
+        
         //from wicket examples:
         getSecuritySettings().setAuthorizationStrategy(new IAuthorizationStrategy()
         {
@@ -53,7 +58,7 @@ public class ImdbApplication extends WebApplication
                     if (((SignInSession)Session.get()).isSignedIn()) {
                         return true;
                     }
-                    return true;
+                    //throw new RestartResponseAtInterceptPageException(Login.class);
                 }
                 // okay to proceed
                 return true;

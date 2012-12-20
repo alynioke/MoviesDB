@@ -37,7 +37,7 @@ public final class SignInSession extends AuthenticatedWebSession
         return false;
     }
 
-    protected String getHash(String password) 
+    public static String getHash(String password) 
     {
     	if (password == null) {
     		throw new NullPointerException("parameter value is null at method getHash");

@@ -31,12 +31,8 @@ public class SignInSessionTest
 	public void setUp() 
 	{
 		users = new ArrayList<User>();
-		user = new User();
+		user = new User("alinka", SignInSession.getHash("alina"), "Alina", "Karpelceva");
 		user.setId(8);
-		user.setFirstname("Alina");
-		user.setLastname("Karpelceva");
-		user.setLogin("alinka");
-		user.setPassword("c542a5c75409b4c42c96dea4fb6ddd50bf591c22");
 		users.add(user);
 		
 		Request mockRequest = mock(Request.class);

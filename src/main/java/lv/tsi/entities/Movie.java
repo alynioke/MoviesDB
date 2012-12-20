@@ -33,25 +33,15 @@ public class Movie implements IClusterable
         
     }
 
-    public Movie(int id, String title, int year, String img, Genre genre)
-    {
-        this.title = title;
-        this.year = year;
-        this.img = img;
-        this.id = id;
-        this.genre = genre;
-    }
-
-    public Movie(int id, String title, int year, String img, 
+    public Movie(String title, int year, String img, 
             Genre genre, String actors, String description)
     {
         this.title = title;
         this.year = year;
         this.img = img;
-        this.id = id;
         this.genre = genre;
-        this.setActors(actors);
-        this.setDescription(description);
+        this.actors = actors;
+        this.description = description;
     }
 
     public String getTitle()

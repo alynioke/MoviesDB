@@ -9,12 +9,8 @@ import org.apache.wicket.markup.html.basic.Label;
 
 public class Homepage extends WebPage implements AuthenticatedWebPage 
 {
-	DatabaseHandler dbHandler = DatabaseHandler.instance;
-	
     public Homepage() 
     {
-    	dbHandler.connect();
-
         String welcome = "";
         String signout = "";
         User user = ((SignInSession)Session.get()).getUser();
