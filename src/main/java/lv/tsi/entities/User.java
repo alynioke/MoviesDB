@@ -17,6 +17,8 @@ public class User
     private String firstname;
     private String lastname;
     private String password;
+    
+    public User() {}
 
     public User(String login, String password, String firstname, String lastname)
     {

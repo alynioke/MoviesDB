@@ -93,7 +93,7 @@ public class MoviePreview extends Homepage
         add(new Label("actors", "Stars: "+movie.getActors()));
         add(new WebImage("img", movie.getImg()));
 
-        List<Rating> results = hibernateRatingDAO.getByMovieIdAndUserId(movieId, 0);
+        List<Rating> results = hibernateRatingDAO.getRatingForMovie(movieId);
         float ratingValue = 0;
         int nrOfVotes = results.size();
         int sumOfRatings = 0;

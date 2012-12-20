@@ -1,11 +1,8 @@
 package lv.tsi.database;
 
-import lv.tsi.entities.Rating;
-
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 
 public class HibernateDAO 
 {
@@ -18,7 +15,6 @@ public class HibernateDAO
     	if (itemClass == null) {
     		throw new NullPointerException("parameter is null at method selectById");
     	}
-    	//тут надо чтоб вернул НАШУ сессию
         Session session = dbHandler.getSession();
         session.beginTransaction();
         T object = (T) session.get(itemClass, id);

@@ -1,7 +1,7 @@
 package lv.tsi.pages;
 import org.apache.wicket.markup.html.panel.Panel;
 
-class MoviesPanel extends Panel
+public class MoviesPanel extends Panel
 {
     public MoviesPanel(String id)
     {

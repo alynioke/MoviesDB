@@ -52,15 +52,12 @@ public class ImdbApplication extends WebApplication
             @Override
             public <T extends Component> boolean isInstantiationAuthorized(Class<T> componentClass) 
             {
-                // Check if the new Page requires authentication (implements the marker interface)
                 if (AuthenticatedWebPage.class.isAssignableFrom(componentClass)) {
-                    // Is user signed in?
                     if (((SignInSession)Session.get()).isSignedIn()) {
                         return true;
                     }
                     //throw new RestartResponseAtInterceptPageException(Login.class);
                 }
-                // okay to proceed
                 return true;
             }
         });

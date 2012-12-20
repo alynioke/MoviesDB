@@ -1,6 +1,5 @@
 package lv.tsi.pages;
 
-import lv.tsi.database.DatabaseHandler;
 import lv.tsi.entities.User;
 
 import org.apache.wicket.Session;
